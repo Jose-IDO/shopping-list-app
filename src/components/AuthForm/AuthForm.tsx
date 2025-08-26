@@ -1,4 +1,4 @@
-// src/components/AuthForm/AuthForm.tsx
+
 import React from 'react';
 import styles from './AuthForm.module.css';
 import Button from '../Button/Button';
@@ -59,7 +59,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, onSubmit, onSwitchForm }) => 
             <Input
               label="Cell Number"
               type="tel"
-              placeholder="+27 123 456 7890"
+              placeholder="+27 ..."
               required
             />
           )}
