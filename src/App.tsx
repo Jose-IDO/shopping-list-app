@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import LoginPage from './pages/LoginPage/LoginPage';
-import RegistrationPage from './pages/RegistrationPage/RegistrationPage';
-import HomePage from './pages/HomePage/HomePage';
+import LoginPage from './Pages/LoginPage';
+import RegistrationPage from './Pages/RegistrationPage';
+import HomePage from './Pages/HomePage';
 import './App.css';
 
 type PageType = 'login' | 'register' | 'home';
