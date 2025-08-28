@@ -7,10 +7,10 @@ const LoginPage: React.FC = () => {
   const handleLogin = async (data: any) => {
     setIsLoading(true);
     
-
+  
     console.log('Login attempt with:', data);
     
-
+ 
     setTimeout(() => {
       console.log('Login successful');
       setIsLoading(false);

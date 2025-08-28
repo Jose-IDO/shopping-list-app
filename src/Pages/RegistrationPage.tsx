@@ -11,6 +11,8 @@ const RegistrationPage: React.FC = () => {
     console.log('Registration attempt with:', data);
     
 
+    
+
     setTimeout(() => {
       console.log('Registration successful');
       setIsLoading(false);

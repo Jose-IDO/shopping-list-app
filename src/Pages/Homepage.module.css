@@ -8,6 +8,7 @@
   --background-gray: #f9fafb;
   --border-light: #f3f4f6;
   --border-color: #e5e7eb;
+  --green-light: #dcfce7;
 }
 
 .container {
@@ -27,18 +28,166 @@
 
 .pageHeader {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
   gap: 16px;
   flex-wrap: wrap;
+}
+
+.headerText {
+  flex: 1;
 }
 
 .pageTitle {
   font-size: 28px;
   font-weight: 600;
   color: var(--text-dark);
+  margin: 0 0 4px 0;
+}
+
+.listCount {
+  font-size: 14px;
+  color: var(--text-gray);
   margin: 0;
+}
+
+/* Search and Sort Controls */
+.controls {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.searchContainer {
+  position: relative;
+  flex: 1;
+  min-width: 280px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  opacity: 0.5;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 12px 16px 12px 44px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: var(--background-white);
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1);
+}
+
+.searchInput::placeholder {
+  color: var(--text-light-gray);
+}
+
+/* Sort Controls */
+.sortContainer {
+  position: relative;
+}
+
+.sortButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background-color: var(--background-white);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.sortButton:hover {
+  border-color: var(--primary-green);
+}
+
+.sortIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.sortLabel {
+  font-weight: 500;
+}
+
+.dropdownArrow {
+  font-size: 10px;
+  color: var(--text-light-gray);
+  transition: transform 0.2s ease;
+}
+
+.sortButton:hover .dropdownArrow {
+  transform: rotate(180deg);
+}
+
+/* Sort Dropdown */
+.sortDropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 4px;
+  background-color: var(--background-white);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  min-width: 180px;
+}
+
+.sortOption {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: 14px;
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.sortOption:hover {
+  background-color: var(--background-gray);
+}
+
+.sortOption.active {
+  background-color: var(--green-light);
+  color: var(--primary-green);
+}
+
+.sortOptionIcon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.checkmark {
+  margin-left: auto;
+  color: var(--primary-green);
+  font-weight: 600;
 }
 
 /* Empty State Styles */
@@ -87,39 +236,79 @@
 .listCard {
   background-color: var(--background-white);
   border-radius: 12px;
-  padding: 24px;
+  padding: 20px;
   border: 1px solid var(--border-color);
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
 }
 
 .listCard:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   transform: translateY(-2px);
+  border-color: var(--primary-green);
 }
 
 .listHeader {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   gap: 12px;
 }
 
 .listTitle {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
   color: var(--text-dark);
   margin: 0;
   flex: 1;
 }
 
+.listMenu {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: var(--text-light-gray);
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.listMenu:hover {
+  color: var(--text-dark);
+}
+
+.listMeta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
 .itemCount {
   font-size: 14px;
   color: var(--text-light-gray);
-  background-color: var(--background-gray);
-  padding: 4px 12px;
-  border-radius: 20px;
-  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.itemCount::before {
+  content: "🛒";
+  font-size: 12px;
+}
+
+.listDate {
+  font-size: 12px;
+  color: var(--text-light-gray);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.listDate::before {
+  content: "📅";
+  font-size: 10px;
 }
 
 .listActions {
@@ -137,6 +326,14 @@
 @media (min-width: 480px) {
   .pageTitle {
     font-size: 32px;
+  }
+  
+  .controls {
+    flex-wrap: nowrap;
+  }
+  
+  .searchContainer {
+    max-width: 400px;
   }
   
   .listActions {
