@@ -1,0 +1,218 @@
+:root {
+  --primary-green: #4ade80;
+  --primary-green-hover: #22c55e;
+  --text-dark: #374151;
+  --text-gray: #6b7280;
+  --text-light-gray: #9ca3af;
+  --background-white: #ffffff;
+  --background-gray: #f9fafb;
+  --border-light: #f3f4f6;
+  --border-color: #e5e7eb;
+  --green-light: #dcfce7;
+  --red-color: #ef4444;
+  --red-hover: #dc2626;
+}
+
+.container {
+  min-height: 100vh;
+  background-color: var(--background-gray);
+}
+
+.main {
+  padding: 24px 0;
+}
+
+.content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.pageHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.headerIcon {
+  width: 64px;
+  height: 64px;
+  background-color: var(--primary-green);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pageTitle {
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.pageSubtitle {
+  font-size: 16px;
+  color: var(--text-gray);
+  margin: 4px 0 0 0;
+}
+
+/* Profile Card Styles */
+.profileCard {
+  background-color: var(--background-white);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 24px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.cardIcon {
+  font-size: 20px;
+}
+
+.cardHeaderText {
+  flex: 1;
+}
+
+.cardTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0 0 4px 0;
+}
+
+.cardSubtitle {
+  font-size: 14px;
+  color: var(--text-gray);
+  margin: 0;
+}
+
+.editButton {
+  flex-shrink: 0;
+}
+
+.cardContent {
+  padding: 24px;
+}
+
+/* Form Styles */
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.gridItem {
+  width: 100%;
+}
+
+.readOnlyInput {
+  pointer-events: none;
+  background-color: var(--background-gray);
+  color: var(--text-gray);
+}
+
+.readOnlyInput input {
+  background-color: var(--background-gray);
+  color: var(--text-gray);
+  cursor: default;
+}
+
+.formActions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  flex-direction: column;
+}
+
+/* Danger Zone Styles */
+.dangerZone {
+  background-color: var(--background-white);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  padding: 24px;
+}
+
+.dangerHeader {
+  margin-bottom: 24px;
+}
+
+.dangerTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--red-color);
+  margin: 0 0 4px 0;
+}
+
+.dangerSubtitle {
+  font-size: 14px;
+  color: var(--text-gray);
+  margin: 0;
+}
+
+.signOutButton {
+  background-color: var(--red-color);
+  color: white;
+  border: 1px solid var(--red-color);
+  width: auto;
+  max-width: 150px;
+}
+
+.signOutButton:hover {
+  background-color: var(--red-hover);
+  border-color: var(--red-hover);
+}
+
+/* Responsive Design */
+@media (min-width: 480px) {
+  .formGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .formActions {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  
+  .formActions button {
+    width: auto;
+    min-width: 140px;
+  }
+}
+
+@media (min-width: 768px) {
+  .content {
+    padding: 0 24px;
+  }
+  
+  .main {
+    padding: 32px 0;
+  }
+  
+  .pageTitle {
+    font-size: 36px;
+  }
+  
+  .cardHeader {
+    padding: 32px;
+  }
+  
+  .cardContent {
+    padding: 32px;
+  }
+  
+  .dangerZone {
+    padding: 32px;
+  }
+}
