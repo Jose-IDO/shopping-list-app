@@ -22,13 +22,13 @@ const ProfilePage: React.FC = () => {
   });
   const [editingProfile, setEditingProfile] = useState<UserProfile>(profile);
   
-  // Placeholder user data - TODO: Get from authentication state
+
   const userName = "Joseph";
 
   const handleEdit = () => {
     setEditingProfile(profile);
     setIsEditing(true);
-    // TODO: Populate form with current user data from state/API
+ 
   };
 
   const handleCancel = () => {
@@ -39,8 +39,7 @@ const ProfilePage: React.FC = () => {
   const handleSave = () => {
     setProfile(editingProfile);
     setIsEditing(false);
-    // TODO: Send updated profile data to API
-    // TODO: Show success message
+
     console.log('Profile updated:', editingProfile);
   };
 
@@ -52,9 +51,7 @@ const ProfilePage: React.FC = () => {
   };
 
   const handleSignOut = () => {
-    // TODO: Clear authentication state
-    // TODO: Navigate to login page
-    // TODO: Show confirmation dialog before signing out
+
     console.log('Sign out clicked');
   };
 

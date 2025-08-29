@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import styles from './Header.module.css';
 import cartIcon from '../../assets/shopping-cart.png';
 import homeIcon from '../../assets/house.png';
@@ -10,6 +11,8 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ userName, showNavigation = false }) => {
+  const location = useLocation();
+  
   return (
     <header className={styles.header}>
       <div className={styles.container}>
@@ -22,14 +25,20 @@ const Header: React.FC<HeaderProps> = ({ userName, showNavigation = false }) => 
         
         {showNavigation && (
           <nav className={styles.navigation}>
-            <a href="#" className={styles.navLink}>
+            <Link 
+              to="/home" 
+              className={`${styles.navLink} ${location.pathname === '/home' ? styles.active : ''}`}
+            >
               <img src={homeIcon} alt="Home" width="20" height="20" />
               Home
-            </a>
-            <a href="#" className={styles.navLink}>
+            </Link>
+            <Link 
+              to="/profile" 
+              className={`${styles.navLink} ${location.pathname === '/profile' ? styles.active : ''}`}
+            >
               <img src={userIcon} alt="Profile" width="20" height="20" />
               Profile
-            </a>
+            </Link>
           </nav>
         )}
         
