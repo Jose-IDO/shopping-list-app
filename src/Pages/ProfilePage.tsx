@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './ProfilePage.module.css';
 import Header from '../components/Header/Header';
 import Button from '../components/Button/Button';
@@ -21,14 +22,13 @@ const ProfilePage: React.FC = () => {
     cellNumber: ''
   });
   const [editingProfile, setEditingProfile] = useState<UserProfile>(profile);
-  
+  const navigate = useNavigate();
 
   const userName = "Joseph";
 
   const handleEdit = () => {
     setEditingProfile(profile);
     setIsEditing(true);
- 
   };
 
   const handleCancel = () => {
@@ -39,7 +39,6 @@ const ProfilePage: React.FC = () => {
   const handleSave = () => {
     setProfile(editingProfile);
     setIsEditing(false);
-
     console.log('Profile updated:', editingProfile);
   };
 
@@ -51,8 +50,10 @@ const ProfilePage: React.FC = () => {
   };
 
   const handleSignOut = () => {
-
     console.log('Sign out clicked');
+    // TODO: Clear authentication state
+    // For now, navigate to login
+    navigate('/login');
   };
 
   return (
