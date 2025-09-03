@@ -1,10 +1,10 @@
 import axios from 'axios';
 import mockApi from './mockApi';
 
-// Use different API URLs for development vs production
+
 const API_BASE_URL = import.meta.env.DEV 
-  ? 'http://localhost:3001'  // Local development
-  : null; // Production will use mock API
+  ? 'http://localhost:3001' 
+  : undefined;
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -13,9 +13,9 @@ const api = axios.create({
   },
 });
 
-// In production, use mock API instead of axios
+
 if (import.meta.env.PROD) {
-  // Override axios with mock API for production
+
   const mockApiWrapper = {
     get: (url: string) => {
       if (url.includes('/users')) {
@@ -62,7 +62,6 @@ if (import.meta.env.PROD) {
     }
   };
   
-  // Replace the default export with mock API wrapper
   Object.assign(api, mockApiWrapper);
 }
 
