@@ -52,7 +52,7 @@
   margin: 0;
 }
 
-/* Search and Sort Controls */
+
 .controls {
   display: flex;
   gap: 12px;
@@ -97,7 +97,7 @@
   color: var(--text-light-gray);
 }
 
-/* Sort Controls */
+
 .sortContainer {
   position: relative;
 }
@@ -140,7 +140,7 @@
   transform: rotate(180deg);
 }
 
-/* Sort Dropdown */
+
 .sortDropdown {
   position: absolute;
   top: 100%;
@@ -190,7 +190,7 @@
   font-weight: 600;
 }
 
-/* Empty State Styles */
+
 .emptyState {
   text-align: center;
   padding: 64px 24px;
@@ -226,7 +226,7 @@
   margin: 0 0 32px 0;
 }
 
-/* Lists Grid Styles */
+
 .listsGrid {
   display: grid;
   grid-template-columns: 1fr;
@@ -339,7 +339,7 @@
   min-width: 120px;
 }
 
-/* Responsive Design */
+
 @media (min-width: 480px) {
   .pageTitle {
     font-size: 32px;

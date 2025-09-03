@@ -59,7 +59,7 @@
   margin: 4px 0 0 0;
 }
 
-/* Profile Card Styles */
+
 .profileCard {
   background-color: var(--background-white);
   border-radius: 12px;
@@ -105,7 +105,7 @@
   padding: 24px;
 }
 
-/* Form Styles */
+
 .formGrid {
   display: grid;
   grid-template-columns: 1fr;
@@ -136,7 +136,7 @@
   flex-direction: column;
 }
 
-/* Danger Zone Styles */
+
 .dangerZone {
   background-color: var(--background-white);
   border-radius: 12px;
@@ -174,7 +174,7 @@
   border-color: var(--red-hover);
 }
 
-/* Responsive Design */
+
 @media (min-width: 480px) {
   .formGrid {
     grid-template-columns: 1fr 1fr;

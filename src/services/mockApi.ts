@@ -1,5 +1,4 @@
-// Mock API service for production deployment
-// This simulates the JSON server functionality in the browser
+
 
 interface User {
   id: string;
@@ -43,7 +42,6 @@ class MockApiService {
   };
 
   constructor() {
-    // Load data from localStorage or initialize with default data
     const savedData = localStorage.getItem(this.storageKey);
     if (savedData) {
       this.data = JSON.parse(savedData);
@@ -65,7 +63,7 @@ class MockApiService {
     return Date.now().toString() + Math.random().toString(36).substr(2, 9);
   }
 
-  // User endpoints
+
   async getUsers(query?: string) {
     if (query && query.includes('email=')) {
       const email = query.split('email=')[1];
@@ -100,7 +98,7 @@ class MockApiService {
     throw new Error('User not found');
   }
 
-  // Shopping Lists endpoints
+  
   async getShoppingLists(query?: string) {
     if (query && query.includes('userId=')) {
       const userId = query.split('userId=')[1];
@@ -146,7 +144,7 @@ class MockApiService {
     const listIndex = this.data.shoppingLists.findIndex(l => l.id === id);
     if (listIndex !== -1) {
       this.data.shoppingLists.splice(listIndex, 1);
-      // Also delete all items in this list
+
       this.data.items = this.data.items.filter(item => item.shoppingListId !== id);
       this.saveData();
       return { data: { id } };
@@ -154,7 +152,7 @@ class MockApiService {
     throw new Error('Shopping list not found');
   }
 
-  // Items endpoints
+
   async getItems(query?: string) {
     if (query && query.includes('shoppingListId=')) {
       const shoppingListId = query.split('shoppingListId=')[1];
@@ -183,7 +181,7 @@ class MockApiService {
     };
     this.data.items.push(newItem);
     
-    // Update item count for the shopping list
+
     const listIndex = this.data.shoppingLists.findIndex(l => l.id === itemData.shoppingListId);
     if (listIndex !== -1) {
       this.data.shoppingLists[listIndex].itemCount = this.data.items.filter(i => i.shoppingListId === itemData.shoppingListId).length;
@@ -214,7 +212,7 @@ class MockApiService {
       const item = this.data.items[itemIndex];
       this.data.items.splice(itemIndex, 1);
       
-      // Update item count for the shopping list
+
       const listIndex = this.data.shoppingLists.findIndex(l => l.id === item.shoppingListId);
       if (listIndex !== -1) {
         this.data.shoppingLists[listIndex].itemCount = this.data.items.filter(i => i.shoppingListId === item.shoppingListId).length;

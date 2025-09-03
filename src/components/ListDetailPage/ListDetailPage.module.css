@@ -317,7 +317,7 @@
   }
 }
 
-/* Sort Section Styles */
+
 .sortSection {
   margin-bottom: 24px;
 }
@@ -408,7 +408,7 @@
   margin-left: auto;
 }
 
-/* Item Image Styles */
+
 .itemImageContainer {
   display: flex;
   align-items: center;
@@ -431,7 +431,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Responsive image sizing */
+
 @media (max-width: 768px) {
   .itemImage {
     width: 40px;

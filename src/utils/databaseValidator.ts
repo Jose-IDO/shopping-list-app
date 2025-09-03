@@ -127,24 +127,4 @@ export const validateEntity = (entity: any, type: 'user' | 'shoppingList' | 'sho
 };
 
 
-export const logValidationResults = (result: DatabaseValidationResult): void => {
-  console.group('🔍 Database Validation Results');
-  
-  if (result.isValid) {
-    console.log('✅ Database is valid!');
-  } else {
-    console.error('❌ Database has errors:');
-    result.errors.forEach(error => console.error(`  • ${error}`));
-  }
 
-  if (result.warnings.length > 0) {
-    console.warn('⚠️ Warnings:');
-    result.warnings.forEach(warning => console.warn(`  • ${warning}`));
-  }
-
-  if (result.fixedData) {
-    console.log('🔧 Fixed data available - use result.fixedData to update database');
-  }
-
-  console.groupEnd();
-};
