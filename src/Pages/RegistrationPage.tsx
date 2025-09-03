@@ -1,27 +1,42 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../store';
+import { registerUser, clearError } from '../store/slices/authSlice';
+import { showNotification } from '../store/slices/uiSlice';
 import AuthForm from '../components/AuthForm/AuthForm';
 
 const RegistrationPage: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const { isAuthenticated, loading, error } = useSelector((state: RootState) => state.auth);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/home');
+    }
+  }, [isAuthenticated, navigate]);
+
+  useEffect(() => {
+    dispatch(clearError());
+  }, [dispatch]);
 
   const handleRegistration = async (data: any) => {
-    setIsLoading(true);
+    const result = await dispatch(registerUser({
+      email: data.email,
+      password: data.password,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      cellNumber: data.cellNumber
+    }));
     
-    console.log('Registration attempt with:', data);
-    
-
-    
-
-    setTimeout(() => {
-      console.log('Registration successful');
-      setIsLoading(false);
-      
-      // TODO: Set authentication state here
-      // For now, navigate to login
+    if (registerUser.fulfilled.match(result)) {
+      dispatch(showNotification({
+        message: 'Account created successfully! Please log in.',
+        type: 'success'
+      }));
       navigate('/login');
-    }, 1000);
+    }
   };
 
   const handleSwitchToLogin = () => {
@@ -33,6 +48,8 @@ const RegistrationPage: React.FC = () => {
       type="register"
       onSubmit={handleRegistration}
       onSwitchForm={handleSwitchToLogin}
+      loading={loading}
+      error={error}
     />
   );
 };

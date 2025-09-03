@@ -97,6 +97,25 @@
   color: var(--text-white);
 }
 
+.logoutButton {
+  background-color: transparent;
+  border: 1px solid var(--text-gray);
+  color: var(--text-gray);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: 8px;
+}
+
+.logoutButton:hover {
+  background-color: #ef4444;
+  border-color: #ef4444;
+  color: white;
+}
+
 @media (min-width: 768px) {
   .navigation {
     display: flex;
