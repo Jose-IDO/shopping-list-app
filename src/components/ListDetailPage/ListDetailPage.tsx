@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from '../../utils/withRouter';
 import { RootState, AppDispatch } from '../../store';
-import { fetchItems, createItem, updateItem, deleteItem, updateShoppingList } from '../../store/slices/shoppingListSlice';
+import { fetchItems, fetchShoppingLists, createItem, updateItem, deleteItem, updateShoppingList } from '../../store/slices/shoppingListSlice';
+import { setListDetailSortOption } from '../../store/slices/uiSlice';
 
 import styles from './ListDetailPage.module.css';
 import Header from '../../components/Header/Header';
@@ -56,10 +57,13 @@ interface Props {
   items: { [listId: string]: ShoppingListItem[] };
   loading: boolean;
   fetchItems: (listId: string) => void;
+  fetchShoppingLists: (userId: string) => void;
   createItem: (item: Omit<ShoppingListItem, 'id' | 'createdAt' | 'updatedAt'>) => void;
   updateItem: (data: { id: string; updates: Partial<ShoppingListItem> }) => void;
   deleteItem: (data: { id: string; shoppingListId: string }) => void;
   updateShoppingList: (data: { id: string; updates: Partial<ShoppingList> }) => void;
+  listDetailSortOption: SortOption;
+  setListDetailSortOption: (option: SortOption) => void;
 
   navigate: (path: string) => void;
   params: { id: string };
@@ -77,7 +81,6 @@ interface State {
   isEditingListName: boolean;
   editingListName: string;
   shareEmail: string;
-  sortOption: SortOption;
   isSortDropdownOpen: boolean;
 }
 
@@ -92,7 +95,6 @@ class ListDetailPage extends Component<Props, State> {
       isEditingListName: false,
       editingListName: '',
       shareEmail: '',
-      sortOption: 'newest',
       isSortDropdownOpen: false,
     };
   }
@@ -100,6 +102,9 @@ class ListDetailPage extends Component<Props, State> {
   componentDidMount() {
     const listId = this.props.params.id;
     if (listId) {
+      if (this.props.user && !this.props.lists.find((l) => l.id === listId)) {
+        this.props.fetchShoppingLists(this.props.user.id);
+      }
       this.props.fetchItems(listId);
       this.loadListData();
       this.updateStateFromURL();
@@ -216,7 +221,11 @@ class ListDetailPage extends Component<Props, State> {
   };
 
   handleEditListName = () => {
-    this.setState({ isEditingListName: true });
+    const { currentList } = this.state;
+    this.setState({
+      isEditingListName: true,
+      editingListName: currentList?.name ?? '',
+    });
   };
 
   handleSaveListName = async () => {
@@ -286,15 +295,15 @@ class ListDetailPage extends Component<Props, State> {
     const validSortOptions: SortOption[] = ['newest', 'oldest', 'name-asc', 'name-desc', 'category-asc', 'category-desc'];
     const sortOption = validSortOptions.includes(sortParam as SortOption) ? sortParam as SortOption : 'newest';
     
-    if (sortOption !== this.state.sortOption) {
-      this.setState({ sortOption });
+    if (sortOption !== this.props.listDetailSortOption) {
+      this.props.setListDetailSortOption(sortOption);
     }
   };
 
   updateURLFromState = () => {
     const params = new URLSearchParams();
-    if (this.state.sortOption !== 'newest') {
-      params.set('sort', this.state.sortOption);
+    if (this.props.listDetailSortOption !== 'newest') {
+      params.set('sort', this.props.listDetailSortOption);
     }
     
     const newSearch = params.toString();
@@ -307,13 +316,14 @@ class ListDetailPage extends Component<Props, State> {
   };
 
   handleSortChange = (option: SortOption) => {
-    this.setState({ sortOption: option, isSortDropdownOpen: false }, () => {
+    this.props.setListDetailSortOption(option);
+    this.setState({ isSortDropdownOpen: false }, () => {
       this.updateURLFromState();
     });
   };
 
   sortItems = (items: ShoppingListItem[]): ShoppingListItem[] => {
-    const { sortOption } = this.state;
+    const { listDetailSortOption: sortOption } = this.props;
     const sortedItems = [...items];
     
     sortedItems.sort((a, b) => {
@@ -347,9 +357,9 @@ class ListDetailPage extends Component<Props, State> {
       isEditingListName,
       editingListName,
       shareEmail,
-      sortOption,
       isSortDropdownOpen,
     } = this.state;
+    const { listDetailSortOption: sortOption } = this.props;
 
     const userName = user ? user.firstName : 'User';
     const sortedItems = this.sortItems(currentItems);
@@ -387,17 +397,31 @@ class ListDetailPage extends Component<Props, State> {
                       placeholder="List name"
                     />
                     <div className={styles.editActions}>
-                      <Button onClick={this.handleSaveListName}>Save</Button>
-                      <Button variant="secondary" onClick={this.handleCancelEditListName}>
+                      <Button type="button" onClick={this.handleSaveListName}>Save</Button>
+                      <Button type="button" variant="secondary" onClick={this.handleCancelEditListName}>
                         Cancel
                       </Button>
                     </div>
                   </div>
                 ) : (
                   <div className={styles.listTitleContainer}>
-                    <h1 className={styles.listTitle}>{currentList.name}</h1>
-                    <button className={styles.editButton} onClick={this.handleEditListName}>
-                      <img src={plusIcon} alt="Edit" style={{ width: '16px', height: '16px' }} />
+                    <h1
+                      className={styles.listTitle}
+                      onClick={this.handleEditListName}
+                      onKeyDown={(e) => e.key === 'Enter' && this.handleEditListName()}
+                      role="button"
+                      tabIndex={0}
+                      title="Click to edit list name"
+                    >
+                      {currentList.name}
+                    </h1>
+                    <button
+                      type="button"
+                      className={styles.editButton}
+                      onClick={this.handleEditListName}
+                      title="Edit list name"
+                    >
+                      Edit
                     </button>
                   </div>
                 )}
@@ -513,6 +537,15 @@ class ListDetailPage extends Component<Props, State> {
                               </div>
                             )}
                             <button
+                              type="button"
+                              className={styles.editItemButton}
+                              onClick={() => this.handleEditItem(item)}
+                              title="Edit item"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              type="button"
                               className={styles.deleteButton}
                               onClick={() => this.handleDeleteItem(item.id)}
                             >
@@ -545,15 +578,17 @@ const mapStateToProps = (state: RootState) => ({
   lists: state.shoppingLists.lists,
   items: state.shoppingLists.items,
   loading: state.shoppingLists.loading,
+  listDetailSortOption: state.ui.listDetailSortOption,
 });
 
 const mapDispatchToProps = (dispatch: AppDispatch) => ({
   fetchItems: (listId: string) => dispatch(fetchItems(listId)),
+  fetchShoppingLists: (userId: string) => dispatch(fetchShoppingLists(userId)),
   createItem: (item: Omit<ShoppingListItem, 'id' | 'createdAt' | 'updatedAt'>) => dispatch(createItem(item)),
   updateItem: (data: { id: string; updates: Partial<ShoppingListItem> }) => dispatch(updateItem(data)),
   deleteItem: (data: { id: string; shoppingListId: string }) => dispatch(deleteItem(data)),
   updateShoppingList: (data: { id: string; updates: Partial<ShoppingList> }) => dispatch(updateShoppingList(data)),
-
+  setListDetailSortOption: (option: SortOption) => dispatch(setListDetailSortOption(option)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ListDetailPage));

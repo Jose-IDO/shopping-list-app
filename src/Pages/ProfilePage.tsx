@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { withRouter } from '../utils/withRouter';
 import { RootState, AppDispatch } from '../store';
 import { logout, updateUserProfile, changePassword } from '../store/slices/authSlice';
-import { showNotification } from '../store/slices/uiSlice';
+import { showNotification, resetFilters } from '../store/slices/uiSlice';
+import { clearShoppingLists } from '../store/slices/shoppingListSlice';
 import styles from './ProfilePage.module.css';
 import Header from '../components/Header/Header';
 import Button from '../components/Button/Button';
@@ -24,6 +25,8 @@ interface Props {
   error: string | null;
   updateUserProfile: (profileData: Partial<UserProfile>) => void;
   logout: () => void;
+  clearShoppingLists: () => void;
+  resetFilters: () => void;
   showNotification: (notification: any) => void;
   navigate: (path: string) => void;
 }
@@ -129,6 +132,8 @@ class ProfilePage extends Component<Props, State> {
   };
 
   handleSignOut = () => {
+    this.props.clearShoppingLists();
+    this.props.resetFilters();
     this.props.logout();
     this.props.navigate('/login');
   };
@@ -325,6 +330,8 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = (dispatch: AppDispatch) => ({
   updateUserProfile: (profileData: Partial<UserProfile>) => dispatch(updateUserProfile(profileData)),
   logout: () => dispatch(logout()),
+  clearShoppingLists: () => dispatch(clearShoppingLists()),
+  resetFilters: () => dispatch(resetFilters()),
   showNotification: (notification: any) => dispatch(showNotification(notification)),
   changePassword: (args: { currentPassword: string; newPassword: string }) => dispatch(changePassword(args)),
 });

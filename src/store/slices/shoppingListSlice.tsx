@@ -169,6 +169,11 @@ const shoppingListSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
+    clearShoppingLists: (state) => {
+      state.lists = [];
+      state.items = {};
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -248,5 +253,5 @@ const shoppingListSlice = createSlice({
   },
 });
 
-export const { clearError } = shoppingListSlice.actions;
+export const { clearError, clearShoppingLists } = shoppingListSlice.actions;
 export default shoppingListSlice.reducer;

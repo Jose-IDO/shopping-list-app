@@ -38,20 +38,30 @@
   font-weight: 600;
   color: #374151;
   margin: 0;
+  cursor: pointer;
+  padding: 4px 0;
+  border-radius: 4px;
+  transition: background-color 0.15s ease;
+}
+
+.listTitle:hover {
+  background-color: #f3f4f6;
 }
 
 .editButton {
-  background: none;
-  border: none;
+  background: #e5e7eb;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 20px;
-  padding: 4px;
-  opacity: 0.6;
-  transition: opacity 0.2s ease;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 6px 12px;
+  color: #374151;
+  transition: background-color 0.15s ease;
 }
 
 .editButton:hover {
-  opacity: 1;
+  background: #d1d5db;
 }
 
 .editNameContainer {
@@ -264,6 +274,22 @@
   background-color: #f3f4f6;
   border-radius: 4px;
   border: 1px solid #e5e7eb;
+}
+
+.editItemButton {
+  background: #e5e7eb;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 12px;
+  color: #374151;
+  transition: background-color 0.15s ease;
+}
+
+.editItemButton:hover {
+  background: #d1d5db;
 }
 
 .deleteButton {

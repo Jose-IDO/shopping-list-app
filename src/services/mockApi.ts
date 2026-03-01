@@ -98,11 +98,18 @@ class MockApiService {
     throw new Error('User not found');
   }
 
-  
   async getShoppingLists(query?: string) {
     if (query && query.includes('userId=')) {
-      const userId = query.split('userId=')[1];
-      const lists = this.data.shoppingLists.filter(l => l.userId === userId);
+      const params = new URLSearchParams(query);
+      const userId = params.get('userId');
+      if (!userId) return { data: [] };
+      const user = this.data.users.find((u: User) => u.id === userId);
+      const userEmail = user?.email ?? '';
+      const lists = this.data.shoppingLists.filter(
+        (l: ShoppingList) =>
+          l.userId === userId ||
+          (Array.isArray(l.sharedWith) && userEmail && l.sharedWith.includes(userEmail))
+      );
       return { data: lists };
     }
     return { data: this.data.shoppingLists };

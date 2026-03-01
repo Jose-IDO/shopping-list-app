@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from '../utils/withRouter';
 import { RootState, AppDispatch } from '../store';
-import { fetchShoppingLists, createShoppingList, deleteShoppingList } from '../store/slices/shoppingListSlice';
-import { setSearchQuery, setSortOption, setCreateModalOpen, SortOption } from '../store/slices/uiSlice';
+import { fetchShoppingLists, createShoppingList, deleteShoppingList, clearShoppingLists, updateShoppingList } from '../store/slices/shoppingListSlice';
+import { setSearchQuery, setSortOption, setCreateModalOpen, resetFilters, SortOption } from '../store/slices/uiSlice';
 import { logout } from '../store/slices/authSlice';
 import styles from './HomePage.module.css';
 import Header from '../components/Header/Header';
 import Button from '../components/Button/Button';
+import Input from '../components/Input/Input';
 import CreateModal from '../components/CreateModal/CreateModal';
 import searchIcon from '../assets/filter.png';
 import shoppingCartIcon from '../assets/shopping-cart.png';
@@ -46,9 +47,12 @@ interface Props {
   fetchShoppingLists: (userId: string) => void;
   createShoppingList: (data: { name: string; userId: string }) => void;
   deleteShoppingList: (id: string) => void;
+  updateShoppingList: (data: { id: string; updates: Partial<ShoppingList> }) => void;
+  clearShoppingLists: () => void;
   setSearchQuery: (query: string) => void;
   setSortOption: (option: SortOption) => void;
   setCreateModalOpen: (isOpen: boolean) => void;
+  resetFilters: () => void;
 
   logout: () => void;
   navigate: (path: string) => void;
@@ -61,6 +65,8 @@ interface Props {
 interface State {
   isSortDropdownOpen: boolean;
   filteredLists: ShoppingList[];
+  editingListId: string | null;
+  editingListName: string;
 }
 
 class HomePage extends Component<Props, State> {
@@ -69,6 +75,8 @@ class HomePage extends Component<Props, State> {
     this.state = {
       isSortDropdownOpen: false,
       filteredLists: [],
+      editingListId: null,
+      editingListName: '',
     };
   }
 
@@ -198,6 +206,24 @@ class HomePage extends Component<Props, State> {
     this.props.navigate(`/list/${listId}`);
   };
 
+  handleStartEditList = (list: ShoppingList) => {
+    this.setState({ editingListId: list.id, editingListName: list.name });
+  };
+
+  handleCancelEditList = () => {
+    this.setState({ editingListId: null, editingListName: '' });
+  };
+
+  handleSaveListName = async (listId: string) => {
+    const { editingListName } = this.state;
+    if (!editingListName.trim()) return;
+    await this.props.updateShoppingList({
+      id: listId,
+      updates: { name: editingListName.trim() },
+    });
+    this.setState({ editingListId: null, editingListName: '' });
+  };
+
   handleDeleteList = async (listId: string) => {
     try {
 
@@ -218,13 +244,9 @@ class HomePage extends Component<Props, State> {
 
 
   handleLogout = () => {
-
+    this.props.clearShoppingLists();
+    this.props.resetFilters();
     this.props.logout();
-
-    localStorage.removeItem('persist:root');
-    localStorage.removeItem('currentUser');
-    localStorage.removeItem('users');
-
     this.props.navigate('/login');
   };
 
@@ -265,7 +287,7 @@ class HomePage extends Component<Props, State> {
 
   render() {
     const { user, isCreateModalOpen } = this.props;
-    const { filteredLists, isSortDropdownOpen } = this.state;
+    const { filteredLists, isSortDropdownOpen, editingListId, editingListName } = this.state;
     const listCount = filteredLists.length;
     const userName = user ? user.firstName : 'User';
 
@@ -357,30 +379,66 @@ class HomePage extends Component<Props, State> {
                 {filteredLists.map((list) => (
                   <div key={list.id} className={styles.listCard}>
                     <div className={styles.listHeader}>
-                      <h3 className={styles.listTitle}>{list.name}</h3>
-                      <button 
-                        className={styles.deleteButton}
-                        onClick={() => this.handleDeleteList(list.id)}
-                      >
-                        Delete
-                      </button>
+                      {editingListId === list.id ? (
+                        <div className={styles.listEditRow}>
+                          <Input
+                            value={editingListName}
+                            onChange={(e) => this.setState({ editingListName: e.target.value })}
+                            placeholder="List name"
+                            className={styles.listNameInput}
+                          />
+                          <div className={styles.listEditActions}>
+                            <Button type="button" onClick={() => this.handleSaveListName(list.id)}>
+                              Save
+                            </Button>
+                            <Button type="button" variant="secondary" onClick={this.handleCancelEditList}>
+                              Cancel
+                            </Button>
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          <h3 className={styles.listTitle}>{list.name}</h3>
+                          <div className={styles.listHeaderButtons}>
+                            <button
+                              type="button"
+                              className={styles.editListButton}
+                              onClick={() => this.handleStartEditList(list)}
+                              title="Edit list name"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              type="button"
+                              className={styles.deleteButton}
+                              onClick={() => this.handleDeleteList(list.id)}
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </>
+                      )}
                     </div>
-                    <div className={styles.listMeta}>
-                      <span className={styles.itemCount}>
-                        {list.itemCount} items
-                      </span>
-                      <span className={styles.listDate}>
-                        {new Date(list.createdAt).toLocaleDateString()}
-                      </span>
-                    </div>
-                    <div className={styles.listActions}>
-                      <Button 
-                        variant="secondary" 
-                        onClick={() => this.handleViewList(list.id)}
-                      >
-                        View Details
-                      </Button>
-                    </div>
+                    {editingListId !== list.id && (
+                      <>
+                        <div className={styles.listMeta}>
+                          <span className={styles.itemCount}>
+                            {list.itemCount} items
+                          </span>
+                          <span className={styles.listDate}>
+                            {new Date(list.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <div className={styles.listActions}>
+                          <Button
+                            variant="secondary"
+                            onClick={() => this.handleViewList(list.id)}
+                          >
+                            View Details
+                          </Button>
+                        </div>
+                      </>
+                    )}
                   </div>
                 ))}
               </div>
@@ -412,10 +470,12 @@ const mapDispatchToProps = (dispatch: AppDispatch) => ({
   fetchShoppingLists: (userId: string) => dispatch(fetchShoppingLists(userId)),
   createShoppingList: (data: { name: string; userId: string }) => dispatch(createShoppingList(data)),
   deleteShoppingList: (id: string) => dispatch(deleteShoppingList(id)),
+  updateShoppingList: (data: { id: string; updates: Partial<ShoppingList> }) => dispatch(updateShoppingList(data)),
+  clearShoppingLists: () => dispatch(clearShoppingLists()),
   setSearchQuery: (query: string) => dispatch(setSearchQuery(query)),
   setSortOption: (option: SortOption) => dispatch(setSortOption(option)),
   setCreateModalOpen: (isOpen: boolean) => dispatch(setCreateModalOpen(isOpen)),
-
+  resetFilters: () => dispatch(resetFilters()),
   logout: () => dispatch(logout()),
 });
 

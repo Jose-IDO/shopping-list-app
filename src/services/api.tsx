@@ -2,21 +2,15 @@ import axios from 'axios';
 import mockApi from './mockApi';
 
 
-const API_BASE_URL = import.meta.env.DEV 
-  ? 'http://localhost:3001' 
-  : undefined;
-
+// Use mock API in both dev and prod so the app works without a separate backend (e.g. json-server on 3001)
 const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: undefined,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-
-if (import.meta.env.PROD) {
-
-  const mockApiWrapper = {
+const mockApiWrapper = {
     get: (url: string) => {
       if (url.includes('/users')) {
         const query = url.includes('?') ? url.split('?')[1] : undefined;
@@ -61,9 +55,8 @@ if (import.meta.env.PROD) {
       return Promise.reject(new Error('Endpoint not found'));
     }
   };
-  
-  Object.assign(api, mockApiWrapper);
-}
+
+Object.assign(api, mockApiWrapper);
 
 api.interceptors.request.use(
   (config) => {

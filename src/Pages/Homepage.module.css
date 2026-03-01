@@ -263,6 +263,46 @@
   flex: 1;
 }
 
+.listHeaderButtons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.editListButton {
+  background: var(--border-color);
+  border: 1px solid var(--border-color);
+  color: var(--text-dark);
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  transition: background-color 0.15s ease;
+}
+
+.editListButton:hover {
+  background-color: #d1d5db;
+}
+
+.listEditRow {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.listNameInput {
+  flex: 1;
+  min-width: 0;
+}
+
+.listEditActions {
+  display: flex;
+  gap: 8px;
+}
+
 .deleteButton {
   background: none;
   border: 1px solid var(--border-color);

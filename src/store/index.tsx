@@ -9,7 +9,7 @@ import uiSlice from './slices/uiSlice';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth']
+  whitelist: ['auth', 'shoppingLists', 'ui'],
 };
 
 const rootReducer = combineReducers({

@@ -5,6 +5,7 @@ export type SortOption = 'newest' | 'oldest' | 'name-asc' | 'name-desc' | 'categ
 interface UiState {
   searchQuery: string;
   sortOption: SortOption;
+  listDetailSortOption: SortOption;
   isCreateModalOpen: boolean;
   selectedCategory: string | null;
   notification: {
@@ -16,6 +17,7 @@ interface UiState {
 const initialState: UiState = {
   searchQuery: '',
   sortOption: 'newest',
+  listDetailSortOption: 'newest',
   isCreateModalOpen: false,
   selectedCategory: null,
   notification: null,
@@ -30,6 +32,9 @@ const uiSlice = createSlice({
     },
     setSortOption: (state, action: PayloadAction<SortOption>) => {
       state.sortOption = action.payload;
+    },
+    setListDetailSortOption: (state, action: PayloadAction<SortOption>) => {
+      state.listDetailSortOption = action.payload;
     },
     setCreateModalOpen: (state, action: PayloadAction<boolean>) => {
       state.isCreateModalOpen = action.payload;
@@ -46,6 +51,7 @@ const uiSlice = createSlice({
     resetFilters: (state) => {
       state.searchQuery = '';
       state.sortOption = 'newest';
+      state.listDetailSortOption = 'newest';
       state.selectedCategory = null;
     },
   },
@@ -54,6 +60,7 @@ const uiSlice = createSlice({
 export const {
   setSearchQuery,
   setSortOption,
+  setListDetailSortOption,
   setCreateModalOpen,
   setSelectedCategory,
   showNotification,
