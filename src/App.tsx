@@ -16,7 +16,7 @@ const App: React.FC = () => {
   return (
     <Provider store={store}>
       <PersistGate loading={<div>Loading...</div>} persistor={persistor}>
-        <Router>
+        <Router basename={import.meta.env.BASE_URL.replace(/\/$/, '') || '/'}>
           <div className="App">
             <Routes>
               <Route path="/login" element={<LoginPage />} />
